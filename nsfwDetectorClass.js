@@ -9,7 +9,7 @@ class NsfwDetector {
         this._classifierPromise = window.tensorflowPipeline('zero-shot-image-classification', 'Xenova/clip-vit-base-patch32');
     }
 
-    async isNsfw(imageUrls) {
+    async isNsfwBatch(imageUrls) {
         let blobUrls = [];
         try {
             blobUrls = await Promise.all(imageUrls.map(imageUrl => this._loadAndResizeImage(imageUrl)));
@@ -67,4 +67,5 @@ class NsfwDetector {
 }
 
 window.NsfwDetector = NsfwDetector;
+
 
