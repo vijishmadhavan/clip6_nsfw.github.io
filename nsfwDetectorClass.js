@@ -12,23 +12,11 @@ class NsfwDetector {
     async isNsfw(imageUrl) {
         let blobUrl = '';
         try {
-            // Initial check with lower resolution
-            blobUrl = await this._loadAndResizeImage(imageUrl, 124);
-            let classifier = await this._classifierPromise;
-            let output = await classifier(blobUrl, this._nsfwLabels);
-            console.log('Initial classification (124x124):', output); // Log initial results
-    
-            let nsfwDetected = output.some(result => result.score > this._threshold);
-            
-            // If NSFW is detected, recheck with higher resolution
-            if (nsfwDetected) {
-                URL.revokeObjectURL(blobUrl); // Free up memory from the first blob
-                blobUrl = await this._loadAndResizeImage(imageUrl, 224);
-                output = await classifier(blobUrl, this._nsfwLabels);
-                console.log('Re-evaluation classification (224x224):', output); // Log re-evaluation results
-                nsfwDetected = output.some(result => result.score > this._threshold);
-            }
-            
+            blobUrl = await this._loadAndResizeImage(imageUrl);
+            const classifier = await this._classifierPromise; // Use the preloaded model
+            const output = await classifier(blobUrl, this._nsfwLabels);
+            console.log(output);
+            const nsfwDetected = output.some(result => result.score > this._threshold);
             return nsfwDetected;
         } catch (error) {
             console.error('Error during NSFW classification: ', error);
@@ -39,20 +27,19 @@ class NsfwDetector {
             }
         }
     }
-    
-    
-    async _loadAndResizeImage(imageUrl, size) {
+
+    async _loadAndResizeImage(imageUrl) {
         const img = await this._loadImage(imageUrl);
         const offScreenCanvas = document.createElement('canvas');
         const ctx = offScreenCanvas.getContext('2d');
-    
+
         // Set the canvas size to the target resolution
-        offScreenCanvas.width = size;
-        offScreenCanvas.height = size;
-    
+        offScreenCanvas.width = 64;
+        offScreenCanvas.height = 64;
+
         // Draw the image onto the canvas at the new size
         ctx.drawImage(img, 0, 0, offScreenCanvas.width, offScreenCanvas.height);
-    
+
         // Convert the canvas to a Blob and create a Blob URL
         return new Promise((resolve, reject) => {
             offScreenCanvas.toBlob(blob => {
@@ -65,7 +52,6 @@ class NsfwDetector {
             }, 'image/jpeg');
         });
     }
-    
 
     async _loadImage(url) {
         return new Promise((resolve, reject) => {
@@ -79,6 +65,3 @@ class NsfwDetector {
 }
 
 window.NsfwDetector = NsfwDetector;
-    
-
-
