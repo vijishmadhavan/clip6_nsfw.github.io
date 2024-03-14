@@ -7,7 +7,7 @@
         import { pipeline as tensorflowPipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.16.0';
         window.tensorflowPipeline = tensorflowPipeline;
     </script>
-    <script src="./main.js" defer></script>
+    <script src="./nsfwDetectorClass.js" defer></script>
 </head>
 
 <body>
@@ -42,7 +42,27 @@
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-vhu4WRsDPG2v2im.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-LRTx8JIPp34Mjxa.png",
                 "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-BcLrzVl5fJ8uEiM.png",
-                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-JyRniiPqrfmkX2S.png"
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-JyRniiPqrfmkX2S.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-xqHobfBsmVxykQ9.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-UD5Dj7biJCx0y8o.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-lksL0UIaEC8cfle.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-yPD04PSThfH8Nzc.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-OVcWfAcZ8rhqxwk.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-tdWIwjxptaYLYET.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-Kpygx8IbC1OBR3u.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-ZBojIFIdzCSvkmA.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-3dPsi1yoyAT6BAl.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-tmVWctnKWdlLn9M.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-64UgL8EIpkabJkK.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-C0jjshdbEs8HjZy.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-X7iZmtFkCVkKFpQ.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-cvkrKG6XHYja7Lb.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-hvtFxKpvR2IZfya.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-dYVi4825tXwGHjP.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-ZqNg7O2NlU0a7DR.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-RSIz8tUeU9szhf7.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-5hci781QzjBOuSX.png",
+                "https://hotpotmedia.s3.us-east-2.amazonaws.com/8-6qwvZ1ejaeLSrSk.png"   
             ];
 
             const detector = new window.NsfwDetector();
@@ -54,10 +74,10 @@
 
         async function checkAndDisplayImage(imageUrl, detector) {
             try {
-                const isNsfw = await detector.isNsfwBatch([imageUrl]); // Use isNsfwBatch instead of isNsfw
+                const isNsfw = await detector.isNsfw(imageUrl);
                 const contentDiv = document.querySelector('.content');
 
-                if (!isNsfw[0]) {
+                if (!isNsfw) {
                     const imgElement = document.createElement('img');
                     imgElement.src = imageUrl;
                     imgElement.alt = "Displayed Image";
@@ -70,8 +90,6 @@
                 console.error("Error detecting NSFW content or loading image:", error);
             }
         }
-
     </script>
 </body>
 </html>
-
