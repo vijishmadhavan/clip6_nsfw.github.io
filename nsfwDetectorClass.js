@@ -34,8 +34,8 @@ class NsfwDetector {
         const ctx = offScreenCanvas.getContext('2d');
 
         // Set the canvas size to the target resolution
-        offScreenCanvas.width = 64;
-        offScreenCanvas.height = 64;
+        offScreenCanvas.width = 128;
+        offScreenCanvas.height = 128;
 
         // Draw the image onto the canvas at the new size
         ctx.drawImage(img, 0, 0, offScreenCanvas.width, offScreenCanvas.height);
