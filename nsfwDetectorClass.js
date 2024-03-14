@@ -40,5 +40,45 @@ class NsfwDetector {
         }
     }
     
+    
+    async _loadAndResizeImage(imageUrl, size) {
+        const img = await this._loadImage(imageUrl);
+        const offScreenCanvas = document.createElement('canvas');
+        const ctx = offScreenCanvas.getContext('2d');
+    
+        // Set the canvas size to the target resolution
+        offScreenCanvas.width = size;
+        offScreenCanvas.height = size;
+    
+        // Draw the image onto the canvas at the new size
+        ctx.drawImage(img, 0, 0, offScreenCanvas.width, offScreenCanvas.height);
+    
+        // Convert the canvas to a Blob and create a Blob URL
+        return new Promise((resolve, reject) => {
+            offScreenCanvas.toBlob(blob => {
+                if (!blob) {
+                    reject('Canvas to Blob conversion failed');
+                    return;
+                }
+                const blobUrl = URL.createObjectURL(blob);
+                resolve(blobUrl);
+            }, 'image/jpeg');
+        });
+    }
+    
+
+    async _loadImage(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous'; // This is important for loading images from external URLs
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(`Failed to load image: ${url}`);
+            img.src = url;
+        });
+    }
+}
+
+window.NsfwDetector = NsfwDetector;
+    
 
 
